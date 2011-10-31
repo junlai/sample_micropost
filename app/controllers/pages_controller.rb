@@ -4,7 +4,7 @@ class PagesController < ApplicationController
   end
 
   def contact
-    @title = "contact"
+    @title = "Contact"
   end
 
   def about
