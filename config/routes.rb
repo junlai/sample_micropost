@@ -1,4 +1,6 @@
 SampleApp::Application.routes.draw do
+
+  get "/sign_up", :to => "users#new"  
   get "/contact", :to => "pages#contact"
   get "/help", :to => "pages#help"   
   get "/about", :to => "pages#about"   
