@@ -1,4 +1,5 @@
 SampleApp::Application.routes.draw do
+  resources :users
 
   get "/sign_up", :to => "users#new"  
   get "/contact", :to => "pages#contact"
