@@ -1,15 +1,5 @@
 class UsersController < ApplicationController
-  # GET /users
-  # GET /users.json
-  def index
-    @users = User.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @users }
-    end
-  end
-
+ 
   def new
     @user = User.new
     @title = "Sign up"
@@ -17,7 +7,7 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-      Rails.logger.debug(@user.inspect)
+      Rails.logger.debug("name in controll is #{@user.name}")
       if @user.save
         flash[:success] = 'User was successfully created.'
         redirect_to @user
