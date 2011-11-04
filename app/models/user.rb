@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :microposts, :dependent => :destroy
   attr_accessor :password
   attr_accessible :name, :email, :password, :password_confirmation
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -9,6 +10,11 @@ class User < ActiveRecord::Base
 
   before_save :encrypt_password
   
+
+  def feed
+    # This is preliminary. See Chapter 12 for the full implementation.
+    Micropost.where("user_id = ?", id)
+  end
 
   def has_password?(submitted_password)
     encryped_password == encrypt(submitted_password) 
@@ -24,6 +30,8 @@ class User < ActiveRecord::Base
     user = find_by_id(id)
     (user && user.salt == cookie_salt) ? user : nil
   end
+
+  
 
   
 
