@@ -7,9 +7,9 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-      Rails.logger.debug("name in controll is #{@user.name}")
       if @user.save
-        flash[:success] = 'User was successfully created.'
+        sign_in @user
+        flash[:success] = "Welcome to the Sample App!"
         redirect_to @user
       else
         @title = "Sign up"

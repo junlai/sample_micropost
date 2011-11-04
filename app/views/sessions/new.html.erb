@@ -1,0 +1,15 @@
+<h1>登 录</h1>
+<%= form_for(:session, :url => sessions_path) do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password %>
+  </div>
+  <div class="actions">
+    <%= f.submit "登录" %>
+  </div>
+<% end %>
+<p>新用户? <%= link_to "现在注册!", signup_path %></p>
