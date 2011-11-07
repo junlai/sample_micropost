@@ -19,12 +19,15 @@ class User < ActiveRecord::Base
   validates :email, :presence => true, :format => { :with => email_regex }, :uniqueness => true
   validates :password, :presence => true, :confirmation => true, :length => { :within => 6..40 }
 
+  scope :admin, where(:admin => true)
+  # Return microposts from the users being followed by the given user.
+  scope :from_users_followed_by, lambda { |user| followed_by(user) }
+
   before_save :encrypt_password
   
 
   def feed
-    # This is preliminary. See Chapter 12 for the full implementation.
-    Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
   end
 
   def has_password?(submitted_password)
@@ -46,7 +49,7 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(followed)
   end
 
-  def followed!(followed)
+  def follow!(followed)
     relationships.create!(:followed_id => followed.id)
   end
 
@@ -73,5 +76,14 @@ private
 
   def secure_hash(string)
     Digest::SHA2.hexdigest(string)
+  end
+
+  # Return an SQL condition for users followed by the given user.
+  # We include the user's own id as well.
+  def self.followed_by(user)
+    following_ids = %(SELECT followed_id FROM relationships
+                        WHERE follower_id = :user_id)
+    where("user_id IN (#{following_ids}) OR user_id = :user_id",
+          { :user_id => user })
   end
 end
